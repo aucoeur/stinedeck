@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" rel="stylesheet" />
-    <link href="static/css/simple-sidebar.css" rel="stylesheet" />
-    <link type="text/css" href="static/css/style.css" rel="sylesheet" />
-    <title>stinedeck</title>
+    <link href="{{ url_for('static', filename='css/simple-sidebar.css') }}" rel="stylesheet" />
+    <link type="text/css" href="{{ url_for('static', filename='css/style.css') }}" rel="sylesheet" />
+    <title>{% block title %} {% endblock title %}</title>
 </head>
 <body>
 
@@ -17,15 +17,17 @@
     <div id="page-content-wrapper">
         {% include 'partials/navbar.html' %}
         <div class="container-fluid">
-            {% block content %}
-                Hello, World!
-            {% endblock content %}
+            <div class="m-4">
+                {% block content %}
+                    Hello, World!
+                {% endblock content %}
+            </div>
         </div>
     </div>
 </div>
 
-<script src="static/jquery/jquery.min.js"></script>
-<script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Menu Toggle Script -->
 <script>

@@ -9,34 +9,52 @@ host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/stinedeck')
 client = MongoClient(host=f'{host}?retryWrites=false')
 db = client.get_default_database()
 decks = db.decks
+cards = db.cards
 
 decks.drop()
-
-decks.insert_many([
-    {"English": "go", "Romaji": "ikimasu", "Hiragana": "いきます", "Kanji": "行きます"},
-    {"English": "come", "Romaji": "kimasu", "Hiragana": "きます", "Kanji": "来ます"},
-    {"English": "eat", "Romaji": "tabemasu", "Hiragana": "たべます", "Kanji":"食べます"},
-    {"English": "drink", "Romaji": "nomimasu", "Hiragana": "のみます", "Kanji": "飲みます"},
-    {"English": "speak", "Romaji": "hanashimasu", "Hiragana":"はなします", "Kanji": "話します"},
-    {"English": "listen", "Romaji": "kikimasu", "Hiragana": "ききます", "Kanji": "聞きます"},
-    {"English": "read", "Romaji": "yomimasu", "Hiragana": "よみます", "Kanji": "読みます"},
-    {"English": "write", "Romaji": "kakimasu", "Hiragana": "かきます", "Kanji": "書きます"},
-    {"English": "watch", "Romaji": "mimasu", "Hiragana": "みます", "Kanji": "見ます"},
-    {"English": "sleep", "Romaji": "nemasu", "Hiragana": "ねます", "Kanji": "寝ます"},
-    {"English": "study", "Romaji": "benkyoo shimasu", "Hiragana": "べんきょうします", "Kanji": "勉強します"},
-    {"English": "to hang out/play", "Romaji": "asobimasu", "Hiragana": "あそびます", "Kanji": "遊びます"},
-    {"English": "from ~", "Romaji": "~kara", "Hiragana": "~から", "Kanji": ""},
-    {"English": "to ~", "Romaji": "~made", "Hiragana": "~まで", "Kanji": ""},
-    {"English": "year (at college)", "Romaji": "nensei", "Hiragana": "ねんせい", "Kanji": "年生"},
-    {"English": "bus", "Romaji": "basu", "Hiragana": "ばす", "Kanji": ""},
-    {"English": "train", "Romaji": "densha", "Hiragana": "でんしゃ", "Kanji": ""},
-    {"English": "home", "Romaji": "uchi", "Hiragana": "うち", "Kanji": ""}
-    ])
+cards.drop()
 
 @app.route('/')
 def index():
+    '''Show Index page'''
+    title = "Home"
     msg = "Dear Diary, it's me Laganja. Today all the girls sat separate from me and I lived alone under a table."
-    return render_template('index.html', msg=msg)
+    return render_template('index.html', msg=msg, title=title)
+
+@app.route('/deck/create')
+def create_deck():
+    '''Show Create New Deck page'''
+    title = "Create a New Deck"
+    return render_template('create_new.html', title=title)
+
+@app.route('/deck', methods=['POST'])
+def submit_deck():
+    deck = {
+        'title': request.form.get('title'),
+        'tags': request.form.get('tags').split(" ")
+    }
+    deck_id = decks.insert_one(deck).inserted_id
+    return redirect(url_for('show_deck', deck_id=deck_id))
+
+@app.route('/deck/add', methods=['POST'])
+def submit_card():
+    '''Submit New Card form'''
+
+    card = {
+        'front': request.form.get('front'),
+        'back': request.form.get('back'),
+        'deck_id': ObjectId(request.form.get('deck_id'))
+    }
+    print(card)
+    card_id = cards.insert_one(card).inserted_id
+    return redirect(url_for('show_deck', deck_id=request.form.get('deck_id')))
+
+@app.route('/deck/<deck_id>')
+def show_deck(deck_id):
+    '''Show single Deck'''
+    deck = decks.find_one({'_id': ObjectId(deck_id)})
+    card_deck = cards.find({'card_id': ObjectId(deck_id)})
+    return render_template('deck.html', deck=deck, card_deck=card_deck)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=os.environ.get('PORT', 5000))

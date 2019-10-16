@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{{ deck.title }}
+{{ deck._id }}
+{{ deck.tags }}
+<hr>
+
+{% include 'partials/add_card.html' %}
+
+<hr>
+<h3>Cards</h3>
+{% for card in card_deck %}
+    {{ card.front }}
+    {{ card.back }}
+    <!-- {% include 'partials/card.html' %} -->
+{% endfor %}
+
+{% endblock content %}
