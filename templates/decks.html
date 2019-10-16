@@ -7,8 +7,15 @@
     <div class="card">
     {% for deck in decks %}
         <div class='card-body'>
-            <h2><a href='/deck/{{ deck._id }}'>{{ deck.title }}</a></h2>
-            <small>{{ deck._id }}</small>
+            <div class="row">
+                <div class="col">
+                    <h2 class="deck">{{ deck.title }}</h2>
+                </div>
+                <div class="col">
+                    <a href='/deck/{{ deck._id }}/review' class="btn btn-primary active" role="button" aria-pressed="true">Review Deck</a> &nbsp;&nbsp;
+                    <a href="#" class="btn btn-secondary active" role="button" aria-pressed="true">Edit Deck</a>
+                </div>
+            </div>
         </div>
     {% endfor %}
     </div>
