@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Decks</h1>
+
+<div class='card-group'>
+    <div class="card">
+    {% for deck in decks %}
+        <div class='card-body'>
+            <h2><a href='/deck/{{ deck._id }}'>{{ deck.title }}</a></h2>
+            <small>{{ deck._id }}</small>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

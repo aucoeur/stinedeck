@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, Markup
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import os
@@ -18,8 +18,13 @@ cards.drop()
 def index():
     '''Show Index page'''
     title = "Home"
-    msg = "Dear Diary, it's me Laganja. Today all the girls sat separate from me and I lived alone under a table."
-    return render_template('index.html', msg=msg, title=title)
+    body = Markup("Dear Diary, it's me Laganja. Today all the girls sat separate from me and I lived alone under a table.<br><br><center><img src='https://media.giphy.com/media/NudlVy6NXsXVm/source.gif'></center>")
+    return render_template('index.html', body=body, title=title)
+
+@app.route('/decks')
+def show_all_decks():
+    '''View all decks'''
+    return render_template('decks.html', decks=decks.find())
 
 @app.route('/deck/create')
 def create_deck():
