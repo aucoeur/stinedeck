@@ -46,14 +46,14 @@ def submit_card():
         'deck_id': ObjectId(request.form.get('deck_id'))
     }
     print(card)
-    card_id = cards.insert_one(card).inserted_id
+    cards.insert_one(card).inserted_id
     return redirect(url_for('show_deck', deck_id=request.form.get('deck_id')))
 
 @app.route('/deck/<deck_id>')
 def show_deck(deck_id):
     '''Show single Deck'''
     deck = decks.find_one({'_id': ObjectId(deck_id)})
-    card_deck = cards.find({'card_id': ObjectId(deck_id)})
+    card_deck = cards.find({'deck_id': ObjectId(deck_id)})
     return render_template('deck.html', deck=deck, card_deck=card_deck)
 
 if __name__ == '__main__':
