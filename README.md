@@ -1,6 +1,10 @@
-# flashcards
+# s t i n e d e c k
 
 For studying! In theory.
+
+## Credit
+
+* **Start Bootstrap - Simple Sidebar** - https://startbootstrap.com/templates/simple-sidebar/
 
 ## More Reading
 * **React Flashcards** - https://codepen.io/mattgreenberg/pen/ggOpOr
