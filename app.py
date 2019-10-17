@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, Markup
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from random import choice, shuffle
 import os
 
 app = Flask(__name__)
@@ -11,15 +12,14 @@ db = client.get_default_database()
 decks = db.decks
 cards = db.cards
 
-decks.drop()
-cards.drop()
+# decks.drop()
+# cards.drop()
 
 @app.route('/')
 def index():
     '''Show Index page'''
-    title = "Home"
     body = Markup("Dear Diary, it's me Laganja. Today all the girls sat separate from me and I lived alone under a table.<br><br><center><img src='https://media.giphy.com/media/NudlVy6NXsXVm/source.gif'></center>")
-    return render_template('index.html', body=body, title=title)
+    return render_template('index.html', body=body)
 
 @app.route('/decks')
 def show_all_decks():
@@ -50,7 +50,7 @@ def submit_card():
         'back': request.form.get('back'),
         'deck_id': ObjectId(request.form.get('deck_id'))
     }
-    print(card)
+
     cards.insert_one(card).inserted_id
     return redirect(url_for('show_deck', deck_id=request.form.get('deck_id')))
 
@@ -64,9 +64,11 @@ def show_deck(deck_id):
 @app.route('/deck/<deck_id>/review')
 def review_deck(deck_id):
     '''Show review deck page'''
-    front = 'front'
-    back = 'back'
-    return render_template('review.html', front=front, back=back)
+    card_ids = cards.find().distinct('_id')
+
+    card = cards.find_one({'_id': choice(card_ids)})
+    
+    return render_template('review.html', card=card, card_ids=card_ids)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=os.environ.get('PORT', 5000))

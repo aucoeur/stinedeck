@@ -31,19 +31,19 @@
 
 <!-- Toggle Scripts -->
 <script>
-$("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-});
-
-$('div.cardTemplate').click(function () {
-    $(this).toggleClass('flipped');
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
     });
 
-addEventListener("keydown", function(event) {
-    if (event.keyCode == 32)
-        $('div.cardTemplate').toggleClass('flipped');
-    });
+    $('div.cardTemplate').click(function () {
+        $(this).toggleClass('flipped');
+        });
+
+    addEventListener("keydown", function(event) {
+        if (event.keyCode == 32)
+            $('div.cardTemplate').toggleClass('flipped');
+        });
 </script>
 
 </body>

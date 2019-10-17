@@ -1,21 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
     <div class="cardTemplate">
-        <div class="front">front</div>
-        <div class="back">back</div>
+        <div class="front">{{ card.front }}</div>
+        <div class="back">{{ card.back }}</div>
     </div>
 
-<!-- <script>
-    // $('.front').text('front');
-    // $('.back').text('back');
-
-
-
-    // addEventListener("keydown", function(event) {
-    //     if (event.keyCode == 32)
-    //         $('div.cardTemplate').toggleClass('flipped');
-    //     });
-</script> -->
+    {{ card_ids }}
 
 {% endblock content %}

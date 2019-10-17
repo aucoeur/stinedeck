@@ -10,7 +10,7 @@ Tags: {{ deck.tags }}
 {% include 'partials/add_card.html' %}
 
 <hr>
-<h3>Cards</h3>
+<h3 class="deck">Cards</h3>
 {% for card in card_deck %}
     {{ card.front }}
     {{ card.back }}
