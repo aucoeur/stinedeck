@@ -11,7 +11,7 @@ h1:not(.deck), h2:not(.deck), h3:not(.deck) {
   width: 640px;
   margin: auto;
   position: relative;
-  transition: all 0.2s;
+  transition: all 0.3s;
   perspective: 900px;
 }
 
@@ -31,13 +31,13 @@ h1:not(.deck), h2:not(.deck), h3:not(.deck) {
 }
 
 .back {
-    transform: rotateY(-180deg);
+    transform: rotateX(-180deg);
   }
 
 .flipped .back {
-transform: rotateY(0deg);
+    transform: rotateX(0deg);
 }
 
 .flipped .front {
-transform: rotateY(180deg);
+    transform: rotateX(180deg);
 }

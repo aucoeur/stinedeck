@@ -43,7 +43,15 @@
     addEventListener("keydown", function(event) {
         if (event.keyCode == 32)
             $('div.cardTemplate').toggleClass('flipped');
-        });
+        else if (event.keyCode == 39) {
+            $('.carousel').carousel('next')
+        }
+        else if (event.keyCode == 37) {
+            $('.carousel').carousel('prev')
+        }
+    });
+    
+
 </script>
 
 </body>

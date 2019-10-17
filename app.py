@@ -64,11 +64,9 @@ def show_deck(deck_id):
 @app.route('/deck/<deck_id>/review')
 def review_deck(deck_id):
     '''Show review deck page'''
-    card_ids = cards.find().distinct('_id')
-
-    card = cards.find_one({'_id': choice(card_ids)})
-    
-    return render_template('review.html', card=card, card_ids=card_ids)
+    deck_cards = cards.find({'deck_id': ObjectId(deck_id)})
+    deck = decks.find_one({'_id': ObjectId(deck_id)})
+    return render_template('review.html', deck_cards=deck_cards, deck=deck)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=os.environ.get('PORT', 5000))
