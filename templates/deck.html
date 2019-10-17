@@ -1,15 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="row">
+        <div class="col">
+            <b>Deck</b>: {{ deck.title }}<br />
+            <b>_id</b>: {{ deck._id }}<br />
+            <b>Tags</b> : {{ deck.tags }}<br /><br />
+        </div>
+        <div class="col align-self-center">
+            <a href='/deck/{{ deck._id }}/review' class="btn btn-lg btn-primary active" role="button" aria-pressed="true">Review Now!</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-s m-1">
+            <a href="/deck/{{ deck._id }}/edit" class="btn btn-dark active btn-sm" role="button" aria-pressed="true">Edit Info</a>
+        </div>
+        <div class="col-s m-1">
+            <form method='POST' action='/deck/{{ deck._id }}/delete'>
+                <input type='hidden' name='_method' value='DELETE'>
+                <button class='btn btn-secondary btn-sm' type='submit'>Delete Deck</button>
+            </form>
+        </div>
+        <div class="col-l">
 
-    <b>Deck</b>: {{ deck.title }}<br />
-    <b>_id</b>: {{ deck._id }}<br />
-    <b>Tags</b> : {{ deck.tags }}<br /><br />
-    <a href="/deck/{{ deck._id }}/edit" class="btn btn-dark active btn-sm" role="button" aria-pressed="true">Edit Info</a>
-    <form method='POST' action='/deck/{{ deck._id }}/delete'>
-        <input type='hidden' name='_method' value='DELETE'>
-        <button class='btn btn-secondary btn-sm' type='submit'>Delete Deck</button>
-    </form>
+        </div>
+    </div>
     <hr>
 
     <form method="POST" action="/deck/add">
