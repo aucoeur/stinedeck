@@ -2,19 +2,24 @@
 
 {% block content %}
 
-Deck: {{ deck.title }}
-_id: {{ deck._id }}
-Tags: {{ deck.tags }}
-<hr>
+    <b>Deck</b>: {{ deck.title }}<br />
+    <b>_id</b>: {{ deck._id }}<br />
+    <b>Tags</b> : {{ deck.tags }}<br /><br />
+    <a href="/deck/{{ deck._id }}/edit" class="btn btn-dark active btn-sm" role="button" aria-pressed="true">Edit Info</a>
+    <form method='POST' action='/deck/{{ deck._id }}/delete'>
+        <input type='hidden' name='_method' value='DELETE'>
+        <button class='btn btn-secondary btn-sm' type='submit'>Delete Deck</button>
+    </form>
+    <hr>
 
-{% include 'partials/add_card.html' %}
+    <form method="POST" action="/deck/add">
+        {% include 'partials/card_form.html' %}
+    </form>
 
-<hr>
-<h3 class="deck">Cards</h3>
-{% for card in card_deck %}
-    {{ card.front }}
-    {{ card.back }}
-    <!-- {% include 'partials/card.html' %} -->
-{% endfor %}
+    <hr>
+
+    {% if card_deck %}
+        {% include 'partials/cards.html' %}
+    {% endif %}
 
 {% endblock content %}

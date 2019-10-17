@@ -1,0 +1,16 @@
+<div class="form-row">
+    <div class="col">
+        <h3 class="deck">Deck</h3>
+        <br/>
+        <input type="text" class="form-control" placeholder="Title" name="title" id="title" value="{{ deck.title }}">
+        <br /><br />
+    </div>
+    <div class="col">
+        <h3 class="deck">Tags</h3>
+        <small>Add tags, separated with a space</small>
+        <input type="text" class='form-control' id='tags' name='tags' value="{{ ' '.join(deck.tags) }}"></textarea><br />
+    </div>
+</div>
+    <div class='form-group'>
+        <button size='lg' class='btn btn-info btn-block' type='submit'>Save Deck</button>
+    </div>

@@ -30,7 +30,7 @@ def show_all_decks():
 def create_deck():
     '''Show Create New Deck page'''
     title = "Create a New Deck"
-    return render_template('create_new.html', title=title)
+    return render_template('create_new.html', deck={}, title=title)
 
 @app.route('/deck', methods=['POST'])
 def submit_deck():
@@ -41,10 +41,41 @@ def submit_deck():
     deck_id = decks.insert_one(deck).inserted_id
     return redirect(url_for('show_deck', deck_id=deck_id))
 
+@app.route('/deck/<deck_id>')
+def show_deck(deck_id):
+    '''Show single Deck'''
+    deck = decks.find_one({'_id': ObjectId(deck_id)})
+    card_deck = cards.find({'deck_id': ObjectId(deck_id)})
+    return render_template('deck.html', deck=deck, card_deck=card_deck)
+
+@app.route('/deck/<deck_id>/edit')
+def edit_deck(deck_id):
+    '''Display Edit Deck form'''
+    deck = decks.find_one({'_id': ObjectId(deck_id)})
+    return render_template('edit_deck.html', deck=deck)
+
+@app.route('/deck/<deck_id>', methods=['POST'])
+def submit_deck_edit(deck_id):
+    '''Submit Edit Deck form'''
+    updated_deck = {
+        'title': request.form.get('title'),
+        'tags': request.form.get('tags').split(" ")
+    }
+    decks.update_one(
+        {'_id': ObjectId(deck_id)},
+        {'$set': updated_deck})
+    return redirect(url_for('show_deck', deck_id=deck_id))
+
+@app.route('/deck/<deck_id>/delete', methods=['POST'])
+def deck_delete(deck_id):
+    '''Delete deck'''
+    decks.delete_one({'_id': ObjectId(deck_id)})
+    return redirect(url_for('show_all_decks'))
+
 @app.route('/deck/add', methods=['POST'])
 def submit_card():
     '''Submit New Card form'''
-
+    action = "Add"
     card = {
         'front': request.form.get('front'),
         'back': request.form.get('back'),
@@ -52,14 +83,39 @@ def submit_card():
     }
 
     cards.insert_one(card).inserted_id
-    return redirect(url_for('show_deck', deck_id=request.form.get('deck_id')))
+    return redirect(url_for('show_deck', action=action, deck_id=request.form.get('deck_id')))
 
-@app.route('/deck/<deck_id>')
-def show_deck(deck_id):
-    '''Show single Deck'''
-    deck = decks.find_one({'_id': ObjectId(deck_id)})
-    card_deck = cards.find({'deck_id': ObjectId(deck_id)})
-    return render_template('deck.html', deck=deck, card_deck=card_deck)
+@app.route('/card/<card_id>/edit')
+def show_card_edit(card_id):
+    '''Show single card edit page'''
+    action = "Edit"
+    card = cards.find_one({'_id': ObjectId(card_id)})
+    deck = card['deck_id']
+    return render_template('edit_card.html',
+        action=action, card=card, deck=deck)
+
+@app.route('/card/<card_id>', methods=['POST'])
+def submit_card_edit(card_id):
+    '''Submit Edit Card form'''
+    updated_card = {
+        'front': request.form.get('front'),
+        'back': request.form.get('back')
+    }
+    cards.update_one(
+        {'_id': ObjectId(card_id)},
+        {'$set': updated_card})
+    
+    card = cards.find_one({'_id': ObjectId(card_id)})
+    deck_id = card['deck_id']
+    return redirect(url_for('show_deck', deck_id=deck_id))
+
+@app.route('/card/<card_id>/delete', methods=['POST'])
+def card_delete(card_id):
+    '''Delete card'''
+    card = cards.find_one({'_id': ObjectId(card_id)})
+    deck_id = card['deck_id']
+    cards.delete_one({'_id': ObjectId(card_id)})
+    return redirect(url_for('show_deck', deck_id=deck_id))
 
 @app.route('/deck/<deck_id>/review')
 def review_deck(deck_id):

@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<form method="POST" action="/deck">
+<form method="POST" action="/deck/{{ deck._id }}">
     {% include 'partials/deck_form.html' %}
 </form>
 

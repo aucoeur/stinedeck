@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+Front: {{ card.front }}
+Back: {{ card.back }}
+Deck: {{ card.deck_id }}
+<hr>
+    <form method="POST" action="/card/{{ card._id }}">
+        {% include 'partials/card_form.html' %}
+    </form>
+{% endblock content %}

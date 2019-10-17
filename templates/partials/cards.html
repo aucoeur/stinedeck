@@ -1,0 +1,26 @@
+<h3 class="deck">Cards</h3>
+<table class="table table-striped">
+    <thead>
+        <th scope="col">Front</th>
+        <th scope="col">Back</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Remove</th>
+    </thead>
+    <tbody>
+        {% for card in card_deck %}
+        <tr>
+            <td>{{ card.front }}</td>
+            <td>{{ card.back }}</td>
+            <td>
+                <a href="/card/{{ card._id }}/edit" class="btn btn-secondary btn-sm active" role="button" aria-pressed="true">Edit</a>
+            </td>
+            <td>
+                <form method='POST' action='/card/{{ card._id }}/delete'>
+                    <input type='hidden' name='_method' value='DELETE'>
+                    <button class='btn btn-secondary btn-sm' type='submit'>Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
