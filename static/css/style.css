@@ -41,3 +41,8 @@ h1:not(.deck), h2:not(.deck), h3:not(.deck) {
 .flipped .front {
     transform: rotateX(180deg);
 }
+
+.carousel-control-next,
+.carousel-control-prev {
+    filter: invert(100%);
+}
