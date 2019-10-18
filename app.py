@@ -44,9 +44,10 @@ def submit_deck():
 @app.route('/deck/<deck_id>')
 def show_deck(deck_id):
     '''Show single Deck'''
+    action = "Add"
     deck = decks.find_one({'_id': ObjectId(deck_id)})
     card_deck = cards.find({'deck_id': ObjectId(deck_id)})
-    return render_template('deck.html', deck=deck, card_deck=card_deck)
+    return render_template('deck.html', action=action, deck=deck, card_deck=card_deck)
 
 @app.route('/deck/<deck_id>/edit')
 def edit_deck(deck_id):
@@ -75,7 +76,6 @@ def deck_delete(deck_id):
 @app.route('/deck/add', methods=['POST'])
 def submit_card():
     '''Submit New Card form'''
-    action = "Add"
     card = {
         'front': request.form.get('front'),
         'back': request.form.get('back'),
@@ -83,7 +83,7 @@ def submit_card():
     }
 
     cards.insert_one(card).inserted_id
-    return redirect(url_for('show_deck', action=action, deck_id=request.form.get('deck_id')))
+    return redirect(url_for('show_deck', deck_id=request.form.get('deck_id')))
 
 @app.route('/card/<card_id>/edit')
 def show_card_edit(card_id):
