@@ -1,24 +1,33 @@
 from flask import Flask, render_template, request, redirect, url_for, Markup
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
 from bson.objectid import ObjectId
+from datetime import datetime
 from random import choice, shuffle
 import os
 
 app = Flask(__name__)
 
 host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/stinedeck')
-client = MongoClient(host=f'{host}?retryWrites=false')
-db = client.get_default_database()
+client = MongoClient(f'{host}?authSource=admin&retryWrites=false&w=majority')
+db = client.stinedeck
+
 decks = db.decks
 cards = db.cards
 
-# decks.drop()
-# cards.drop()
+last_updated = decks.create_index([('date_lastupdated', ASCENDING)])
+
+@app.context_processor
+def recently_update():
+    recent = decks.find(
+        sort=[('date_lastupdated', -1)],
+        limit=5)
+    return dict(recent=recent)
 
 @app.route('/')
 def index():
     '''Show Index page'''
     body = Markup("Dear Diary, it's me Laganja. Today all the girls sat separate from me and I lived alone under a table.<br><br><center><img src='https://media.giphy.com/media/NudlVy6NXsXVm/source.gif'></center>")
+
     return render_template('index.html', body=body)
 
 @app.route('/decks')
@@ -34,7 +43,10 @@ def create_deck():
 
 @app.route('/deck', methods=['POST'])
 def submit_deck():
+    timestamp = datetime.utcnow()
     deck = {
+        'date_created': timestamp,
+        'date_lastupdated': timestamp,
         'title': request.form.get('title'),
         'tags': request.form.get('tags').split(" ")
     }
@@ -59,6 +71,7 @@ def edit_deck(deck_id):
 def submit_deck_edit(deck_id):
     '''Submit Edit Deck form'''
     updated_deck = {
+        'date_lastupdated': datetime.utcnow(),
         'title': request.form.get('title'),
         'tags': request.form.get('tags').split(" ")
     }
@@ -104,7 +117,7 @@ def submit_card_edit(card_id):
     cards.update_one(
         {'_id': ObjectId(card_id)},
         {'$set': updated_card})
-    
+
     card = cards.find_one({'_id': ObjectId(card_id)})
     deck_id = card['deck_id']
     return redirect(url_for('show_deck', deck_id=deck_id))

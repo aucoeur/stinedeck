@@ -2,7 +2,7 @@ body {
     background-color: #e3e3e3;
 }
 
-h1:not(.deck), h2:not(.deck), h3:not(.deck) {
+h1:not(.deck), h2:not(.deck), h3:not(.deck), h4:not(.deck) {
     color: #FFFFFF;
 }
 

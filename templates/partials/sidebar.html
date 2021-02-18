@@ -3,7 +3,12 @@
     <div class="list-group list-group-flush">
     <a href="{{ url_for('create_deck') }}" class="list-group-item list-group-item-action bg-info text-white">Create New Deck</a>
     <a href="{{ url_for('show_all_decks') }}" class="list-group-item list-group-item-action bg-secondary text-white">View All Decks</a>
-    <a href="#" class="list-group-item list-group-item-action bg-light">Deck 1</a>
-    <a href="#" class="list-group-item list-group-item-action bg-light">Deck 2</a>
+
+    <h4 class="m-2 pt-3 pb-0 text-white">Recently Updated</h4>
+
+    {% for deck in recent  %}
+      <a href="/deck/{{ deck._id }}" class="list-group-item list-group-item-action bg-light">{{ deck.title }} 1</a>
+    {% endfor %}
+
     </div>
 </div>
