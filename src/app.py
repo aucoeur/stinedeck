@@ -7,8 +7,8 @@ import os
 
 app = Flask(__name__)
 
-host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/stinedeck')
-client = MongoClient(f'{host}?authSource=admin&retryWrites=false&w=majority')
+host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/stinedeck?authSource=admin&retryWrites=false&w=majority')
+client = MongoClient(f'{host}')
 db = client.stinedeck
 
 decks = db.decks
